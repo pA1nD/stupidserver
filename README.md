@@ -13,3 +13,7 @@ Send any JSON. Stupid server sill store it.
 ### `/api?key=value` [GET]
 
 Receive any JSON. If query parameter present, data will be filtered. One or multiple query parameters are directly passed to mongodb's .filter() function.
+
+### `/files/upload` [POST]
+
+Receive a picture. Send it as form-data with the key `file`. The endpoint will return a json with a key `fileUrl` which contains the location of the file.

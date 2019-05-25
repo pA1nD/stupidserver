@@ -28,26 +28,33 @@ module.exports = db => {
     })
   })
 
-  const singleUpload = upload.single('image')
+  const singleUpload = upload.single('file')
 
   app.post('/upload', (req, res) => {
     singleUpload(req, res, (err, some) => {
       console.log('done')
       if (err) {
         return res.status(422).send({
-          errors: [{ title: 'Image Upload Error', detail: err.message }]
+          errors: [{ title: 'File Upload Error', detail: err.message }]
         })
       }
 
       db.collection('files').insertOne(
-        { imageUrl: req.file.location },
+        {
+          fileUrl: req.file.location,
+          date: new Date(),
+          ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+          name: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size
+        },
         (err, res) => {
           if (err) throw err
           console.log('file inserted')
         }
       )
 
-      return res.json({ imageUrl: req.file.location })
+      return res.json({ fileUrl: req.file.location })
     })
   })
 
