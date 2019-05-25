@@ -1,6 +1,6 @@
 {
   "name": "The Stupid Server",
-  "description": "The only server you need.",
+  "description": "A completely stupid server that you might want to use to prototype something very fast. Deploy it and it will take any data and send any data.",
   "keywords": ["node", "express", "json", "files"],
   "repository": "https://github.com/pA1nD/stupidserver",
 
