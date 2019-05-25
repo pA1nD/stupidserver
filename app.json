@@ -1,0 +1,16 @@
+{
+  "name": "The Stupid Server",
+  "description": "The only server you need.",
+  "keywords": ["node", "express", "json", "files"],
+  "repository": "https://github.com/pA1nD/stupidserver",
+
+  "env": {
+    "SECRET_ACCESS_KEY": {
+      "description": "AWS S3 SECRET_ACCESS_KEY"
+    },
+    "ACCESS_KEY_ID": {
+      "description": "AWS S3 ACCESS_KEY_ID"
+    }
+  },
+  "addons": ["mongolab", "papertrail"]
+}
