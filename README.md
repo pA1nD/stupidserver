@@ -4,7 +4,7 @@ A completely stupid server that you might want to use to prototype something ver
 
 _**Warning:** If you are concerned about security, this is probably not what you are looking for!_
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/pA1nD/stupidserver)
 
 ## Available Endpoints
 
