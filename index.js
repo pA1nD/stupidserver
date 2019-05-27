@@ -7,15 +7,17 @@ const files = require('./files')
 
 let db
 const app = express()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 const MongoClient = mongo.MongoClient
 const url = process.env.MONGODB_URI || 'mongodb://localhost:27017/stupidserver'
 
 app.use(bodyParser.json())
+app.use(express.urlencoded())
 app.use(cors())
 app.options('*', cors())
 
 app.post('/api', (req, res) => {
+  req.body.show = false
   db.collection('data').insertOne(req.body, function(err, res) {
     if (err) throw err
     console.log('data inserted')
@@ -24,6 +26,7 @@ app.post('/api', (req, res) => {
 })
 
 app.get('/api', (req, res) => {
+  req.query.show = true
   findDocuments(db, 'data', req.query, data => res.send(data))
 })
 
