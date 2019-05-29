@@ -42,7 +42,7 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/slack/approve', (req, res) => {
-  console.log(req.body)
+  console.log(JSON.parse(req.body.payload).actions[0])
   // db.collection('data').updateOne(
   //   { _id: new mongo.ObjectId(req.query.id) },
   //   { $set: { schow: true } },
