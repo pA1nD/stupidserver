@@ -49,7 +49,7 @@ app.post('/slack/approve', (req, res) => {
   if (action.action_id === 'approve') {
     db.collection('data').updateOne(
       { _id: new mongo.ObjectId(action.value) },
-      { $set: { schow: true } },
+      { $set: { show: true } },
       (err, result) => {
         if (err) throw err
         res.sendStatus(200)
@@ -63,6 +63,7 @@ app.post('/slack/approve', (req, res) => {
       if (err || res.statusCode != 200) {
         console.log('Body: ' + body, 'StatusCode: ' + res.statusCode, err)
       }
+      res.sendStatus(200)
     })
   }
 })
