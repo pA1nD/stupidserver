@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 3001
 const MongoUrl =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/stupidserver'
 const SlackWebhook = process.env.SLACK_HOOK
+const NetlifyWebhook =
+  'https://api.netlify.com/build_hooks/5cecc8b8f1819d05dd0208a5'
 const KEY = process.env.KEY || '38-ED5Rr(ahgRcwyabcdefgh'
 
 let db
@@ -53,6 +55,15 @@ app.post('/slack/approve', (req, res) => {
         res.sendStatus(200)
       }
     )
+  }
+  if (action.action_id === 'netlify') {
+    const options = { uri: NetlifyWebhook, method: 'POST' }
+
+    request(options, (err, res, body) => {
+      if (err || res.statusCode != 200) {
+        console.log('Body: ' + body, 'StatusCode: ' + res.statusCode, err)
+      }
+    })
   }
 })
 
@@ -109,7 +120,7 @@ const slack = (msg, title) => {
               type: 'plain_text',
               text: 'Update Website'
             },
-            url: 'https://google.com'
+            action_id: 'netlify'
           }
         ]
       }
