@@ -42,15 +42,18 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/slack/approve', (req, res) => {
-  console.log(JSON.parse(req.body.payload).actions[0])
-  // db.collection('data').updateOne(
-  //   { _id: new mongo.ObjectId(req.query.id) },
-  //   { $set: { schow: true } },
-  //   (err, result) => {
-  //     if (err) throw err
-  //     res.sendStatus(200)
-  //   }
-  // )
+  const action = JSON.parse(req.body.payload).actions[0]
+
+  if (action.action_id === 'approve') {
+    db.collection('data').updateOne(
+      { _id: new mongo.ObjectId(action.value) },
+      { $set: { schow: true } },
+      (err, result) => {
+        if (err) throw err
+        res.sendStatus(200)
+      }
+    )
+  }
 })
 
 MongoClient.connect(
