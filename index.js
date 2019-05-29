@@ -1,11 +1,15 @@
 require('dotenv').config()
 
+const keyPublishable = process.env.STRIPE_PUBLISHABLE_KEY;
+const keySecret = process.env.STRIPE_SECRET_KEY;
+
 const express = require('express')
 const request = require('request')
 const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongo = require('mongodb')
+const stripe = require("stripe")(keySecret);
 const files = require('./files')
 
 const PORT = process.env.PORT || 3001
@@ -69,6 +73,28 @@ app.post('/slack/approve', (req, res) => {
     res.sendStatus(200)
   }
 })
+
+// charge
+app.post("/charge", (req, res) => {
+  let amount = 5000;
+
+  stripe.customers.create({
+    email: req.body.email,
+    card: req.body.id
+  })
+  .then(customer =>
+    stripe.charges.create({
+      amount,
+      description: "Digital Paraguay - Job Post",
+      currency: "usd",
+      customer: customer.id
+    }))
+  .then(charge => res.send(charge))
+  .catch(err => {
+    console.log("Error:", err);
+    res.status(500).send({error: "Purchase Failed"});
+  });
+});
 
 MongoClient.connect(
   MongoUrl,
