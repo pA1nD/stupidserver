@@ -12,7 +12,6 @@ const mongo = require('mongodb')
 const stripe = require("stripe")(keySecret);
 const files = require('./files')
 
-
 const PORT = process.env.PORT || 3001
 const MongoUrl =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/stupidserver'
