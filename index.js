@@ -76,7 +76,7 @@ app.post('/slack/approve', (req, res) => {
 
 // charge
 app.post("/charge", (req, res) => {
-  let amount = 50;
+  let amount = 5000;
 
   stripe.customers.create({
     email: req.body.email,
