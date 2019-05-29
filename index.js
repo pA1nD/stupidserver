@@ -44,7 +44,9 @@ app.get('/api', (req, res) => {
 })
 
 app.post('/slack/approve', (req, res) => {
-  const action = JSON.parse(req.body.payload).actions[0]
+  const payload = JSON.parse(req.body.payload)
+  const action = payload.actions[0]
+  const responseUrl = payload.response_url
 
   if (action.action_id === 'approve') {
     db.collection('data').updateOne(
@@ -53,18 +55,17 @@ app.post('/slack/approve', (req, res) => {
       (err, result) => {
         if (err) throw err
         res.sendStatus(200)
+        const msg = {
+          text: 'Approved.'
+        }
+        request({ uri: responseUrl, method: 'POST', json: msg }, () =>
+          res.sendStatus(200)
+        )
       }
     )
   }
   if (action.action_id === 'netlify') {
-    const options = { uri: NetlifyWebhook, method: 'POST' }
-
-    request(options, (err, res, body) => {
-      if (err || res.statusCode != 200) {
-        console.log('Body: ' + body, 'StatusCode: ' + res.statusCode, err)
-      }
-      res.sendStatus(200)
-    })
+    request.post(NetlifyWebhook, () => res.sendStatus(200))
   }
 })
 
