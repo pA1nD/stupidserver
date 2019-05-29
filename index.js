@@ -34,6 +34,10 @@ app.post('/api', (req, res) => {
 })
 
 app.get('/api', (req, res) => {
+  if (req.query.key === '38-ED5Rr(ahgRcwy') {
+    res.sendStatus(403)
+  }
+  delete req.query.key
   req.query.show = true
   findDocuments(db, 'data', req.query, data => res.send(data))
 })
