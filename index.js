@@ -65,7 +65,8 @@ app.post('/slack/approve', (req, res) => {
     )
   }
   if (action.action_id === 'netlify') {
-    request.post(NetlifyWebhook, () => res.sendStatus(200))
+    request.post(NetlifyWebhook)
+    res.sendStatus(200)
   }
 })
 
