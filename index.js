@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001
 const MongoUrl =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/stupidserver'
 const SlackWebhook = process.env.SLACK_HOOK
-console.log(process.env.SLACK_HOOK)
+const KEY = process.env.KEY || '38-ED5Rr(ahgRcwyabcdefgh'
 
 let db
 const app = express()
@@ -34,9 +34,8 @@ app.post('/api', (req, res) => {
 })
 
 app.get('/api', (req, res) => {
-  if (req.query.key === '38-ED5Rr(ahgRcwy') {
-    res.sendStatus(403)
-  }
+  if (req.query.key !== KEY) return res.sendStatus(403)
+
   delete req.query.key
   req.query.show = true
   findDocuments(db, 'data', req.query, data => res.send(data))
@@ -45,16 +44,13 @@ app.get('/api', (req, res) => {
 MongoClient.connect(
   MongoUrl,
   { useNewUrlParser: true },
-  function(err, client) {
+  (err, client) => {
     if (err) throw err
     db = client.db()
-    db.createCollection('data', function(err, res) {
-      if (err) throw err
-      app.use('/files', files(db))
-      console.log('Collection "data" created!')
-      app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))
-      //client.close()
-    })
+
+    app.use('/files', files(db))
+
+    app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))
   }
 )
 
@@ -72,41 +68,13 @@ const findDocuments = (db, col, query, callback) => {
 }
 
 const slack = (msg, title) => {
-  // const message = {
-  //   blocks: [
-  //     {
-  //       type: 'section',
-  //       text: {
-  //         type: 'mrkdwn',
-  //         text: 'Danny Torrence left the following review for your property:'
-  //       }
-  //     },
-  //     {
-  //       type: 'section',
-  //       block_id: 'section567',
-  //       text: {
-  //         type: 'mrkdwn',
-  //         text:
-  //           '<https://google.com|Overlook Hotel> \n :star: \n Doors had too many axe holes, guest in room 237 was far too rowdy, whole place felt stuck in the 1920s.'
-  //       }
-  //     }
-  //   ]
-  // }
-  console.log(JSON.stringify(msg, null, 2))
   const message = {
     blocks: [
       {
         type: 'section',
-        fields: [
-          {
-            type: 'mrkdwn',
-            text: `New Submit for *${title}*`
-          }
-        ]
+        fields: [{ type: 'mrkdwn', text: `New Submit for *${title}*` }]
       },
-      {
-        type: 'divider'
-      }
+      { type: 'divider' }
     ],
     attachments: [
       {
