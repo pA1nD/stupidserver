@@ -24,11 +24,11 @@ app.use(cors())
 app.options('*', cors())
 
 app.post('/api', (req, res) => {
-  slack(req.body, req.body.collection)
   req.body.show = false
   db.collection('data').insertOne(req.body, function(err, resp) {
     if (err) throw err
     console.log('data inserted')
+    slack(req.body, req.body.collection)
     res.sendStatus(200)
   })
 })
@@ -39,6 +39,18 @@ app.get('/api', (req, res) => {
   delete req.query.key
   req.query.show = true
   findDocuments(db, 'data', req.query, data => res.send(data))
+})
+
+app.post('/slack/approve', (req, res) => {
+  console.log(req.body)
+  // db.collection('data').updateOne(
+  //   { _id: new mongo.ObjectId(req.query.id) },
+  //   { $set: { schow: true } },
+  //   (err, result) => {
+  //     if (err) throw err
+  //     res.sendStatus(200)
+  //   }
+  // )
 })
 
 MongoClient.connect(
@@ -70,11 +82,34 @@ const findDocuments = (db, col, query, callback) => {
 const slack = (msg, title) => {
   const message = {
     blocks: [
+      { type: 'divider' },
       {
         type: 'section',
         fields: [{ type: 'mrkdwn', text: `New Submit for *${title}*` }]
       },
-      { type: 'divider' }
+      {
+        type: 'actions',
+        elements: [
+          {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Approve'
+            },
+            style: 'primary',
+            value: msg._id,
+            action_id: 'approve'
+          },
+          {
+            type: 'button',
+            text: {
+              type: 'plain_text',
+              text: 'Update Website'
+            },
+            url: 'https://google.com'
+          }
+        ]
+      }
     ],
     attachments: [
       {
