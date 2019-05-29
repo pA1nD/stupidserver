@@ -9,7 +9,9 @@ const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongo = require('mongodb')
+const stripe = require("stripe")(keySecret);
 const files = require('./files')
+
 
 const PORT = process.env.PORT || 3001
 const MongoUrl =
