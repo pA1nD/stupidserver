@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/pA1nD/stupid-server#readme",
   "dependencies": {
-    "aws-sdk": "^2.463.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
